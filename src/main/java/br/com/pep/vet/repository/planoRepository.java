@@ -9,12 +9,12 @@ import br.com.pep.vet.entity.Plano;
 
 public interface planoRepository extends JpaRepository<Plano, Long> {
     
-    List<Plano> findByAtivoOrderByDescricaoAsc(String ativo);
+    List<Plano> findByAtivoOrderByDescricaoAsc(boolean ativo);
     
     List<Plano> findAllByOrderByIdPlanoDesc();
 
     Optional<Plano> findByIdPlano(Long id);
 
-    Optional<Plano> findByIdPlanoAndAtivo(Long id, String ativo);
+    Optional<Plano> findByIdPlanoAndAtivo(Long id, boolean ativo);
 
 }

@@ -15,24 +15,24 @@ public class planoService {
     @Autowired
     planoRepository planorepository;
 
-    public List<Plano> listarPlanos(String apenasAtivo){
-        if(apenasAtivo != null && apenasAtivo.equals("S")){
-            return planorepository.findByAtivoOrderByDescricaoAsc("S");
-        }else{
+    public List<Plano> listarPlanosAtivos(){
+            return planorepository.findByAtivoOrderByDescricaoAsc(true);
+    }
+
+    public List<Plano> listarPlanos(){
             return planorepository.findAllByOrderByIdPlanoDesc();
-        }
     }
 
     public List<Plano> adicionar(Plano plano){
         planorepository.save(plano);
-        return listarPlanos("N");
+        return listarPlanos();
     }
 
     public List<Plano> atualizar(Plano plano){
         //Quando tiver usuário de sistema vincular o plano ao usuário e trocar repository parafindByIdPlanoAnd_campo_do_usuario
         planorepository.findById(plano.getIdPlano()).orElseThrow(() -> new EntityNotFoundException("Plano a ser atualizado não existe"));
         planorepository.save(plano);
-        return listarPlanos("N");
+        return listarPlanos();
     }
 
 }

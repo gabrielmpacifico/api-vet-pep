@@ -3,6 +3,8 @@ package br.com.pep.vet.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import br.com.pep.vet.responseDTO.beneficiarioResponseDTO;
+import br.com.pep.vet.responseDTO.beneficiarioResumoDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +34,11 @@ public class beneficiarioRepositoryTest {
         data.setCpf("99999999999");
         data.setNacionalidade("Brasileiro");
         data.setTipoPessoa("F");
+        data.setCelular("81912345678");
         data.setNascimento(LocalDateTime.now());
         this.criarBeneficiario(data);
 
-        List<Beneficiario> retorno = this.beneficiariorepository.findByNomeIgnoreCaseContainingOrderByNomeAsc("GAB");
+        List<beneficiarioResumoDTO> retorno = this.beneficiariorepository.buscarListaDeNomes("GAB");
         assertThat(retorno).isNotEmpty();
     }
 
@@ -48,10 +51,11 @@ public class beneficiarioRepositoryTest {
         data.setCpf("99999999999");
         data.setNacionalidade("Brasileiro");
         data.setTipoPessoa("F");
+        data.setCelular("81912345678");
         data.setNascimento(LocalDateTime.now());
         this.criarBeneficiario(data);
  
-        List<Beneficiario> retorno = this.beneficiariorepository.findByNomeIgnoreCaseContainingOrderByNomeAsc("Gob");
+        List<beneficiarioResumoDTO> retorno = this.beneficiariorepository.buscarListaDeNomes("Gob");
         assertThat(retorno).isEmpty();
     }
 

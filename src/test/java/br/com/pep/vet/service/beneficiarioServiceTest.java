@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import br.com.pep.vet.responseDTO.beneficiarioResponseDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,10 +38,10 @@ public class beneficiarioServiceTest {
 
         when(beneficiariorepository.findByCpf(cpf)).thenReturn(Optional.of(beneficiario));
 
-        Optional<Beneficiario> resultado = beneficiarioservice.listarByCpf(cpf);
+        beneficiarioResponseDTO resultado = beneficiarioservice.listarByCpf(cpf);
 
-        assertThat(resultado).isPresent();
-        assertThat(resultado.get().getCpf()).isEqualTo(cpf);
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getCpf()).isEqualTo(cpf);
 
         verify(beneficiariorepository, times(1)).findByCpf(cpf);
     }

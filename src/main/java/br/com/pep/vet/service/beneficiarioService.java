@@ -3,7 +3,10 @@ package br.com.pep.vet.service;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.pep.vet.responseDTO.beneficiarioResponseDTO;
+import br.com.pep.vet.responseDTO.beneficiarioResumoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.pep.vet.entity.Beneficiario;
@@ -24,45 +27,40 @@ public class beneficiarioService {
     @Autowired
     private planoRepository planorepository;
 
-    public Beneficiario adicionar(Beneficiario beneficiario){        
+    public beneficiarioResponseDTO adicionar(Beneficiario beneficiario){
         if(beneficiario.getCpf().length() != 11)
             throw CpfException.padrao(beneficiario.getCpf());
 
-        validarPlano(beneficiario.getPlano(), "Plano enviado não existe ou não está ativo");
-        return beneficiariorepository.save(beneficiario);
+        return new beneficiarioResponseDTO(beneficiariorepository.save(beneficiario));
     }
     
-    public Optional<Beneficiario> listarByCpf(String cpf){       
+    public beneficiarioResponseDTO listarByCpf(String cpf){
         if(cpf.length() != 11)
             throw CpfException.padrao(cpf);
         
-        return beneficiariorepository.findByCpf(cpf);        
+        Beneficiario beneficiario = beneficiariorepository.findByCpf(cpf).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        return new beneficiarioResponseDTO(beneficiario);
     }
 
-    public List<Beneficiario> listarByNome(String nome){       
-        return beneficiariorepository.findByNomeIgnoreCaseContainingOrderByNomeAsc(nome);
+    public List<beneficiarioResumoDTO> listarByNome(String nome){
+        return beneficiariorepository.buscarListaDeNomes(nome);
     }
 
     public Optional<Beneficiario> listarById(Long id){
         return beneficiariorepository.findById(id);
     }
     
-    public Beneficiario atualizar(Beneficiario beneficiario){
+    public beneficiarioResponseDTO atualizar(Beneficiario beneficiario){
         //Validar se existe permissão para atualizar esse registro
         //Trocar para findByIdAnd_campo que guarda o usuario
+        if(beneficiario.getCpf().length() != 11)
+            throw CpfException.padrao(beneficiario.getCpf());
+
         beneficiariorepository.findById(beneficiario.getIdBeneficiario()).orElseThrow(() -> new EntityNotFoundException("Usuário não existe"));
-        validarPlano(beneficiario.getPlano(), "Plano não existe ou não está mais ativo");
-        return beneficiariorepository.save(beneficiario);
+        return new beneficiarioResponseDTO(beneficiariorepository.save(beneficiario));
     }
     
     public void remover(Long id){
         beneficiariorepository.deleteById(id);
-    }
-
-    public void validarPlano(Integer plano, String erro){
-        if(plano != null){
-            planorepository.findByIdPlanoAndAtivo(Long.valueOf(plano), "S")
-            .orElseThrow(() -> new EntityNotFoundException(erro));
-        }
     }
 }

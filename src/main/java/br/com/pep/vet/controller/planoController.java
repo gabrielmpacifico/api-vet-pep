@@ -27,9 +27,14 @@ public class planoController {
         return planoservice.adicionar(plano);
     }
 
-    @GetMapping("{ativo}")
-    List<Plano> listarPlanos(@PathVariable("ativo") String ativo){
-        return planoservice.listarPlanos(ativo);
+    @GetMapping("/ativos")
+    List<Plano> listarPlanosAtivos(){
+        return planoservice.listarPlanosAtivos();
+    }
+
+    @GetMapping
+    List<Plano> listarPlanos(){
+        return planoservice.listarPlanos();
     }
 
     @PutMapping

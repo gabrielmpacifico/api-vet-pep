@@ -3,6 +3,8 @@ package br.com.pep.vet.controller;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.pep.vet.responseDTO.beneficiarioResponseDTO;
+import br.com.pep.vet.responseDTO.beneficiarioResumoDTO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,22 +34,23 @@ public class beneficiarioController {
     }
 
     @PostMapping
-    Beneficiario adicionar(@Valid @RequestBody Beneficiario beneficiario){
+    beneficiarioResponseDTO adicionar(@Valid @RequestBody Beneficiario beneficiario){
         return beneficiarioservice.adicionar(beneficiario);    
     }
 
     @GetMapping("{cpf}")
-    Optional<Beneficiario> listarByCpf(@PathVariable("cpf") String cpf){
+    beneficiarioResponseDTO listarByCpf(@PathVariable("cpf") String cpf){
         return beneficiarioservice.listarByCpf(cpf);
     }
 
     @GetMapping
-    List<Beneficiario> listarByNome(@RequestParam(required=true) String nome){
-        return beneficiarioservice.listarByNome(nome);
+    ResponseEntity<List<beneficiarioResumoDTO>> listarByNome(@RequestParam(required=true) String nome){
+        List<beneficiarioResumoDTO> response = beneficiarioservice.listarByNome(nome);
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping
-    Beneficiario atualizar(@RequestBody Beneficiario beneficiario) {
+    beneficiarioResponseDTO atualizar(@RequestBody Beneficiario beneficiario) {
         return beneficiarioservice.atualizar(beneficiario);
     }
 
